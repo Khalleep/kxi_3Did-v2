@@ -2,7 +2,7 @@ fx_version 'cerulean'
 games { 'gta5' }
 
 author 'Khalexi'
-description 'Show ID script made by KXI'
+description 'V2 Show ID script made by KXI'
 lua54 'yes'
 
 -- What to run
