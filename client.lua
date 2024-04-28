@@ -1,29 +1,34 @@
 local isIdDisplaying = false
+local isThreadRunning = false
 
 RegisterCommand("toggleid", function()
     isIdDisplaying = not isIdDisplaying
     if isIdDisplaying then
-            lib.notify({
-                title = 'Player IDs',
-                description = 'Player IDs are now on',
-                type = 'info'
-            })
-        else
-            lib.notify({
-                title = 'Player IDs',
-                description = 'Player IDs are now off',
-                type = 'info'
-            })
+        if not isThreadRunning then
+            StartIdDisplayThread()
+            isThreadRunning = true
+        end
+        lib.notify({
+            title = 'Player IDs',
+            description = 'Player IDs are now on',
+            type = 'info'
+        })
+    else
+        lib.notify({
+            title = 'Player IDs',
+            description = 'Player IDs are now off',
+            type = 'info'
+        })
     end
 end)
 
 RegisterKeyMapping("toggleid", "Toggle Player IDs", "keyboard", "pageup")
 
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
+function StartIdDisplayThread()
+    Citizen.CreateThread(function()
+        while isIdDisplaying do
+            Citizen.Wait(0)
 
-        if isIdDisplaying then
             local playerPed = PlayerPedId()
             local playerCoords = GetEntityCoords(playerPed)
 
@@ -39,8 +44,9 @@ Citizen.CreateThread(function()
                 end
             end
         end
-    end
-end)
+        isThreadRunning = false
+    end)
+end
 
 function DrawPlayerId(x, y, z, id)
     local onScreen, _x, _y = World3dToScreen2d(x, y, z)
