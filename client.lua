@@ -45,7 +45,7 @@ function StartIdDisplayThread()
                 local targetPed = GetPlayerPed(player)
                 local targetCoords = GetEntityCoords(targetPed)
                 local distance = #(playerCoords - targetCoords)
-                local playerid2 = GetPlayerServerId(player
+                local playerid2 = GetPlayerServerId(player)
 
                 if distance < 20.0 and playerPed ~= targetPed then
                     if showplayercfxname then
