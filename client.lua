@@ -1,5 +1,6 @@
 local isIdDisplaying = false
 local isThreadRunning = false
+local showplayercfxname = true
 
 RegisterCommand("toggleid", function()
     isIdDisplaying = not isIdDisplaying
@@ -32,7 +33,12 @@ function StartIdDisplayThread()
             local playerPed = PlayerPedId()
             local playerCoords = GetEntityCoords(playerPed)
 
-            DrawPlayerId(playerCoords.x, playerCoords.y, playerCoords.z + 1.2, GetPlayerServerId(PlayerId()))
+           if showplayercfxname then
+                local playername = GetPlayerName(PlayerId()) 
+                DrawPlayerId(playerCoords.x, playerCoords.y, playerCoords.z + 1.2, playername .. "~n~" .. playerid)
+            else
+                DrawPlayerId(playerCoords.x, playerCoords.y, playerCoords.z + 1.2, playerid)
+            end        
 
             for _, player in ipairs(GetActivePlayers()) do
                 local targetPed = GetPlayerPed(player)
@@ -40,7 +46,12 @@ function StartIdDisplayThread()
                 local distance = #(playerCoords - targetCoords)
 
                 if distance < 20.0 and playerPed ~= targetPed then
-                    DrawPlayerId(targetCoords.x, targetCoords.y, targetCoords.z + 1.2, GetPlayerServerId(player))
+                    if showplayercfxname then
+                        local playername2 = GetPlayerName(player) 
+                        DrawPlayerId(targetCoords.x, targetCoords.y, targetCoords.z + 1.2, playername2 .. "~n~" .. playerid2)
+                    else
+                        DrawPlayerId(targetCoords.x, targetCoords.y, targetCoords.z + 1.2, playerid2)
+                    end
                 end
             end
         end
